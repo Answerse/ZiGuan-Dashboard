@@ -49,8 +49,35 @@
     if (overlay) overlay.classList.remove('open');
   }
 
-  /* 从排行面板采集数据（自动跳过无缝循环复制项：按 rank 去重） */
-  function collectRows(panel) {
+  /* 字段键 -> 面板内子元素选择器（不同模块的字段映射到各自 DOM 节点） */
+  var FIELD_SEL = {
+    rank: '.rank',
+    name: '.c-info .name',
+    sub:  '.c-info .sub',
+    val:  '.val'
+  };
+
+  /* 读取面板声明的字段表头（data-cols="key:标签|key:标签"）。
+     弹窗表头跟着「当前模块实际字段」走：同名模块但字段不同（如 d1 同比 / d2 出租出售）
+     也能各自渲染。缺省给一套通用兜底。 */
+  function parseSchema(panel) {
+    var raw = panel.getAttribute('data-cols');
+    if (!raw) return [
+      { key:'rank', label:'排名' },
+      { key:'name', label:'公司名称' },
+      { key:'sub',  label:'说明' },
+      { key:'val',  label:'资产价值' }
+    ];
+    return raw.split('|').map(function (s) {
+      var i = s.indexOf(':');
+      var key = s.slice(0, i).trim();
+      var label = s.slice(i + 1).trim();
+      return { key: key, label: label };
+    }).filter(function (f) { return f.key; });
+  }
+
+  /* 从排行面板按 schema 通用采集（按 rank 去重，跳过无缝循环复制项） */
+  function collectRows(panel, schema) {
     var items = panel.querySelectorAll('.company-item');
     var seen = {}, rows = [];
     Array.prototype.forEach.call(items, function (it) {
@@ -59,56 +86,58 @@
       if (!rank || seen[rank]) return;           // 跳过重复序号（循环复制）
       seen[rank] = true;
 
-      var nameEl = it.querySelector('.c-info .name');
-      var subEl = it.querySelector('.c-info .sub');
-      var valEl = it.querySelector('.val');
-      var val = '', unit = '';
-      if (valEl) {
-        // .val 文本形如 "8,652" + <small>万</small>
-        var txt = '';
-        Array.prototype.forEach.call(valEl.childNodes, function (n) {
-          if (n.nodeType === 3) txt += n.textContent;   // 仅取文本节点
-        });
-        val = txt.trim();
-        var small = valEl.querySelector('small');
-        unit = small ? small.textContent : '';
-      }
-      var topMatch = it.className.match(/top(\d)/);
-      rows.push({
-        rank: rank,
-        name: nameEl ? nameEl.textContent.trim() : '',
-        sub: subEl ? subEl.textContent.trim() : '',
-        val: val,
-        unit: unit,
-        top: topMatch ? topMatch[1] : ''
+      var row = { _top: (it.className.match(/top(\d)/) || [, ''])[1] };
+      schema.forEach(function (f) {
+        var sel = FIELD_SEL[f.key];
+        var el = sel ? it.querySelector(sel) : null;
+        if (f.key === 'val' && el) {
+          // .val 形如 "8,652" + <small>万</small>
+          var txt = '';
+          Array.prototype.forEach.call(el.childNodes, function (n) {
+            if (n.nodeType === 3) txt += n.textContent;   // 仅取文本节点
+          });
+          row[f.key] = txt.trim();
+          var small = el.querySelector('small');
+          row._unit = small ? small.textContent : '';
+        } else {
+          row[f.key] = el ? el.textContent.trim() : '';
+        }
       });
+      rows.push(row);
     });
     return rows;
   }
 
-  function openModal(title, en, rows) {
+  function openModal(title, en, schema, rows) {
     var overlay = buildModal();
     overlay.querySelector('.m-title').textContent = title || '资产收入公司排行榜';
     overlay.querySelector('.m-en').textContent = en || 'COMPANY RANKING';
 
-    var html = '<table class="rank-table"><thead><tr>' +
-      '<th class="r-no">排名</th><th>公司名称</th><th>说明</th><th class="r-val">资产价值</th>' +
-      '</tr></thead><tbody>';
+    var head = schema.map(function (f) {
+      return '<th class="f-' + f.key + '">' + f.label + '</th>';
+    }).join('');
 
+    var body = '';
     if (!rows.length) {
-      html += '<tr><td colspan="4" class="r-sub" style="text-align:center;padding:24px 0;">暂无数据</td></tr>';
+      body = '<tr><td colspan="' + schema.length + '" class="f-empty" style="text-align:center;padding:24px 0;">暂无数据</td></tr>';
     } else {
-      rows.forEach(function (r) {
-        var badgeCls = r.top ? (' top' + r.top) : '';
-        html += '<tr>' +
-          '<td class="r-no"><span class="rank-badge' + badgeCls + '">' + r.rank + '</span></td>' +
-          '<td>' + r.name + '</td>' +
-          '<td class="r-sub">' + (r.sub || '') + '</td>' +
-          '<td class="r-val">' + r.val + (r.unit ? '<small>' + r.unit + '</small>' : '') + '</td>' +
-          '</tr>';
-      });
+      body = rows.map(function (r) {
+        var tds = schema.map(function (f) {
+          var cls = 'f-' + f.key;
+          var v = r[f.key] || '';
+          if (f.key === 'rank') {
+            var badge = r._top ? (' top' + r._top) : '';
+            return '<td class="' + cls + '"><span class="rank-badge' + badge + '">' + v + '</span></td>';
+          }
+          if (f.key === 'val') {
+            return '<td class="' + cls + '">' + v + (r._unit ? '<small>' + r._unit + '</small>' : '') + '</td>';
+          }
+          return '<td class="' + cls + '">' + v + '</td>';
+        }).join('');
+        return '<tr>' + tds + '</tr>';
+      }).join('');
     }
-    html += '</tbody></table>';
+    var html = '<table class="rank-table"><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody></table>';
     overlay.querySelector('.modal-body').innerHTML = html;
     overlay.classList.add('open');
   }
@@ -181,7 +210,8 @@
         var panel = trigger.closest('.panel') || trigger;
         var titleEl = panel.querySelector('.panel-title .name');
         var enEl = panel.querySelector('.panel-title .en');
-        openModal(titleEl ? titleEl.textContent : '', enEl ? enEl.textContent : '', collectRows(panel));
+        var schema = parseSchema(panel);
+        openModal(titleEl ? titleEl.textContent : '', enEl ? enEl.textContent : '', schema, collectRows(panel, schema));
       } else if (type === 'asset-detail') {
         var name = trigger.getAttribute('data-name') ||
                    (trigger.textContent ? trigger.textContent.trim() : '');
