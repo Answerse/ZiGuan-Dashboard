@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=dashboard1.html">
+  <meta http-equiv="refresh" content="8; url=dashboard1.html">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>资管可视化大屏</title>
   <style>
@@ -19,29 +19,79 @@
       border:1px solid rgba(0,191,255,0.4);
       background:rgba(0,30,60,0.55);
       box-shadow:0 0 24px rgba(0,140,255,0.25), inset 0 0 18px rgba(0,140,255,0.1);
-      padding:42px 56px;
+      padding:48px 64px;
     }
-    .entry h1 { font-size:22px; letter-spacing:3px; margin-bottom:18px; color:#fff; }
-    .entry p { font-size:14px; color:rgba(150,210,255,0.7); margin-bottom:24px; }
+    .entry h1 { font-size:24px; letter-spacing:3px; margin-bottom:18px; color:#fff; }
+    .entry p { font-size:14px; color:rgba(150,210,255,0.7); margin-bottom:28px; }
+    .entry .links { display:flex; gap:18px; justify-content:center; }
     .entry a {
-      display:inline-block; margin:0 8px;
-      padding:10px 24px;
+      display:inline-flex; align-items:center; justify-content:center;
+      min-width:160px; padding:16px 40px;
       border:1px solid rgba(0,191,255,0.6);
-      color:#00bfff; text-decoration:none; font-size:14px;
+      color:#00bfff; text-decoration:none; font-size:18px; letter-spacing:2px;
       box-shadow:0 0 10px rgba(0,170,255,0.3), inset 0 0 8px rgba(0,170,255,0.15);
       transition:.2s;
     }
     .entry a:hover { background:rgba(0,140,255,0.2); color:#fff; box-shadow:0 0 18px rgba(0,170,255,0.5); }
+
+    /* 加载进度条（科技风：青色发光填充 + 百分比） */
+    .progress { margin-top:34px; }
+    .progress-track {
+      position:relative; height:8px; width:100%;
+      background:rgba(0,140,255,0.14);
+      border:1px solid rgba(0,191,255,0.3);
+      overflow:hidden;
+    }
+    .progress-fill {
+      height:100%; width:0;
+      background:linear-gradient(90deg, #00e6ff, #0066ff);
+      box-shadow:0 0 12px rgba(0,170,255,0.7);
+      transition:width .1s linear;
+    }
+    .progress-meta {
+      display:flex; justify-content:space-between; align-items:center;
+      margin-top:10px; font-size:13px; letter-spacing:1px;
+      color:rgba(150,210,255,0.75);
+    }
+    .progress-meta .pct { color:#00e6ff; font-weight:700; font-variant-numeric:tabular-nums; }
   </style>
 </head>
 <body>
   <div class="entry">
     <h1>资管可视化大屏</h1>
     <p>正在进入仪表盘一… 若未自动跳转，请手动选择：</p>
-    <div>
+    <div class="links">
       <a href="dashboard1.html">仪表盘一</a>
       <a href="dashboard2.html">仪表盘二</a>
     </div>
+    <div class="progress">
+      <div class="progress-track"><div class="progress-fill" id="bar"></div></div>
+      <div class="progress-meta">
+        <span>系统加载中</span>
+        <span class="pct" id="pct">0%</span>
+      </div>
+    </div>
   </div>
+
+  <script>
+    (function () {
+      var bar = document.getElementById('bar');
+      var pct = document.getElementById('pct');
+      var p = 0;
+      var timer = setInterval(function () {
+        p += Math.random() * 4 + 2;          // 每步 +2~6%
+        if (p >= 100) {
+          p = 100;
+          clearInterval(timer);
+          bar.style.width = '100%';
+          pct.textContent = '100%';
+          setTimeout(function () { location.href = 'dashboard1.html'; }, 320);
+          return;
+        }
+        bar.style.width = p + '%';
+        pct.textContent = Math.floor(p) + '%';
+      }, 90);
+    })();
+  </script>
 </body>
 </html>
