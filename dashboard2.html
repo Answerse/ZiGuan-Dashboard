@@ -157,8 +157,7 @@
               <ellipse cx="43" cy="76" rx="30" ry="6" fill="rgba(0,140,255,0.15)"/>
               <circle cx="43" cy="43" r="32" fill="none" stroke="rgba(0,100,200,0.16)" stroke-width="11"/>
               <circle class="ov-seg" cx="43" cy="43" r="32" fill="none" stroke="url(#ovDonutA)" stroke-width="11"
-                stroke-dasharray="150.8 50.2" stroke-linecap="round" transform="rotate(-90 43 43)"
-                style="filter:drop-shadow(0 0 6px rgba(0,180,255,0.55));"/>
+                stroke-dasharray="150.8 50.2" stroke-linecap="round" transform="rotate(-90 43 43)"/>
               <circle cx="43" cy="43" r="19" fill="rgba(0,60,140,0.3)" stroke="rgba(0,180,255,0.25)" stroke-width="1"/>
             </svg>
           </div>
@@ -203,24 +202,24 @@
               <circle cx="75" cy="75" r="55" fill="none" stroke="rgba(0,100,200,0.12)" stroke-width="16"/>
               <circle class="seg" data-i="0" cx="75" cy="75" r="55" fill="none" stroke="#00bfff" stroke-width="16"
                 stroke-dasharray="63.5 282.1" stroke-dashoffset="0" stroke-linecap="butt"
-                style="transition:stroke-dasharray .8s cubic-bezier(.4,0,.2,1),stroke-dashoffset .8s cubic-bezier(.4,0,.2,1);"/>
+               />
               <circle class="seg" data-i="1" cx="75" cy="75" r="55" fill="none" stroke="#4d9fff" stroke-width="16"
                 stroke-dasharray="281.4 64.2" stroke-dashoffset="-63.5" stroke-linecap="butt"
-                style="transition:stroke-dasharray .8s cubic-bezier(.4,0,.2,1),stroke-dashoffset .8s cubic-bezier(.4,0,.2,1);"/>
+               />
               <circle class="seg" data-i="2" cx="75" cy="75" r="55" fill="none" stroke="#0066ff" stroke-width="16"
                 stroke-dasharray="0.7 344.9" stroke-dashoffset="-344.9" stroke-linecap="butt"
-                style="transition:stroke-dasharray .8s cubic-bezier(.4,0,.2,1),stroke-dashoffset .8s cubic-bezier(.4,0,.2,1);"/>
+               />
             </svg>
             <div class="scan"></div>
             <div class="pie-center">
-              <div class="v" style="font-size:19px;">735,144<span style="font-size:12px;font-weight:500;color:rgba(180,225,255,0.7);">㎡</span></div>
+              <div class="v">735,144<span>㎡</span></div>
               <div class="l">资产面积</div>
             </div>
           </div>
           <div class="legend-list" id="ratioLegend">
-            <div class="legend-item"><span class="dot" style="background:#00bfff;box-shadow:0 0 6px #00bfff;"></span><span class="name" data-modal="asset-detail">海恒控股</span><span class="pct">135,044<small class="pu">㎡</small></span></div>
-            <div class="legend-item"><span class="dot" style="background:#4d9fff;box-shadow:0 0 6px #4d9fff;"></span><span class="name" data-modal="asset-detail">恒创智能</span><span class="pct">600,000<small class="pu">㎡</small></span></div>
-            <div class="legend-item"><span class="dot" style="background:#0066ff;box-shadow:0 0 6px #0066ff;"></span><span class="name" data-modal="asset-detail">其他</span><span class="pct">100<small class="pu">㎡</small></span></div>
+            <div class="legend-item"><span class="dot"></span><span class="name" data-modal="asset-detail">海恒控股</span><span class="pct">135,044<small class="pu">㎡</small></span></div>
+            <div class="legend-item"><span class="dot"></span><span class="name" data-modal="asset-detail">恒创智能</span><span class="pct">600,000<small class="pu">㎡</small></span></div>
+            <div class="legend-item"><span class="dot"></span><span class="name" data-modal="asset-detail">其他</span><span class="pct">100<small class="pu">㎡</small></span></div>
           </div>
         </div>
       </div>
@@ -250,14 +249,14 @@
               <path class="bill-track" d="M 15 97 A 60 60 0 0 1 135 97" fill="none"
                     stroke="rgba(0,120,220,0.28)" stroke-width="12" stroke-linecap="round"/>
               <!-- 收缴进度弧：0% 收缴率（空弧占位） -->
-              <path d="M 15 97 A 60 60 0 0 1 135 97" fill="none"
+              <path class="gauge-fill" d="M 15 97 A 60 60 0 0 1 135 97" fill="none"
                     stroke="url(#gaugeGrad)" stroke-width="12" stroke-linecap="round"
-                    stroke-dasharray="0.001 999" style="filter:drop-shadow(0 0 6px rgba(0,180,255,0.5));"/>
+                    stroke-dasharray="0.001 999"/>
               <!-- 两端端点 -->
               <circle cx="15" cy="97" r="3" fill="#00bfff"/>
               <circle cx="135" cy="97" r="3" fill="rgba(0,140,255,0.4)"/>
             </svg>
-            <div class="bill-center"><div class="v">0<span style="font-size:18px;">%</span></div><div class="l">收缴率</div></div>
+            <div class="bill-center"><div class="v">0<span>%</span></div><div class="l">收缴率</div></div>
           </div>
           <div class="bill-info">
             <div class="bill-info-item"><span class="l">本月实收金额</span><span class="v">¥20</span></div>
@@ -308,7 +307,7 @@
 
       <!-- 地图 -->
       <div class="panel map-wrap">
-        <svg viewBox="292 275 300 134" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;">
+        <svg viewBox="292 275 300 134" preserveAspectRatio="xMidYMid meet">
       <defs>
         <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="3" result="blur"/>
@@ -619,8 +618,8 @@
           </svg>
         </div>
         <div class="bar-legend">
-          <div class="bar-legend-item"><span class="dot" style="background:linear-gradient(180deg,#00bfff,#0066ff);"></span>租赁</div>
-          <div class="bar-legend-item"><span class="dot" style="background:linear-gradient(180deg,#00ff88,#008844);"></span>出售</div>
+          <div class="bar-legend-item"><span class="dot"></span>租赁</div>
+          <div class="bar-legend-item"><span class="dot"></span>出售</div>
         </div>
       </div>
 

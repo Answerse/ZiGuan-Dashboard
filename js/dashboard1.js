@@ -369,7 +369,7 @@
 
     // 3) 图表先归零占位（避免闪现成品态），待模块就位后再统一启动数字+图表动效
     document.querySelectorAll('.prog-fill').forEach(function (f) {
-      f.dataset.w = f.style.width; f.style.width = '0%';
+      f.dataset.w = f.getAttribute('data-w') || f.style.width; f.style.width = '0%';
     });
     var bc = document.querySelector('.bill-ring .bill-track');
     var C = 2 * Math.PI * 60;

@@ -1868,3 +1868,48 @@ display:inline-flex; align-items:center; justify-content:center;
   .modal-dialog { width:96vw; max-height:90vh; }
   .modal-head .m-title { font-size:17px; }
 }
+
+/* ============================================================
+   内联样式迁移：原 HTML 中硬编码的 style 统一收归此处（2026-07-30）
+   ============================================================ */
+
+/* 进度条填充宽度：值由 data-w 承载，入场动画由 JS 读取 data-w 还原 */
+.prog-bar .prog-fill.pf-op   { width:72.5%; }
+.prog-bar .prog-fill.pf-self { width:27.5%; }
+
+/* 饼图/环形分段进场过渡（原 seg 内联 transition） */
+.pie-chart .seg {
+  transition: stroke-dasharray .8s cubic-bezier(.4,0,.2,1),
+              stroke-dashoffset .8s cubic-bezier(.4,0,.2,1);
+}
+
+/* 地图 svg 铺满容器（原内联 width/height:100%） */
+.map-wrap > svg { width:100%; height:100%; display:block; }
+
+/* 资产占比图例圆点配色（按序：商业/住宅/工业/办公） */
+.legend-list .legend-item:nth-child(1) .dot { background:#00bfff; box-shadow:0 0 6px #00bfff; }
+.legend-list .legend-item:nth-child(2) .dot { background:#4d9fff; box-shadow:0 0 6px #4d9fff; }
+.legend-list .legend-item:nth-child(3) .dot { background:#1e7fff; box-shadow:0 0 6px #1e7fff; }
+.legend-list .legend-item:nth-child(4) .dot { background:#0066ff; box-shadow:0 0 6px #0066ff; }
+
+/* 收缴率中心“%”字号（原内联） */
+.bill-center .v span { font-size:18px; }
+
+/* 资产面积中心数值与单位（原内联，dashboard2 饼图中心） */
+.pie-center .v { font-size:19px; }
+.pie-center .v span { font-size:12px; font-weight:500; color:rgba(180,225,255,0.7); }
+
+/* 管理单位汇总表列宽（原 th 内联 width） */
+.rank-table.hover-glow thead th:nth-child(1) { width:50px; }
+.rank-table.hover-glow thead th:nth-child(3) { width:96px; }
+.rank-table.hover-glow thead th:nth-child(4) { width:140px; }
+.rank-table.hover-glow thead th:nth-child(5) { width:140px; }
+
+/* 柱状图图例圆点渐变（按序） */
+.bar-legend .bar-legend-item:nth-child(1) .dot { background:linear-gradient(180deg,#00bfff,#0066ff); }
+.bar-legend .bar-legend-item:nth-child(2) .dot { background:linear-gradient(180deg,#00ff88,#008844); }
+.bar-legend .bar-legend-item:nth-child(3) .dot { background:linear-gradient(180deg,#ff6b6b,#cc0000); }
+
+/* 环形发光（原内联 filter:drop-shadow） */
+.ov-seg     { filter: drop-shadow(0 0 6px rgba(0,180,255,0.55)); }
+.gauge-fill { filter: drop-shadow(0 0 6px rgba(0,180,255,0.5)); }
