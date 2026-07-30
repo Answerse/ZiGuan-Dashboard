@@ -46,7 +46,16 @@
 
   function closeModal() {
     var overlay = document.getElementById('assetRankModal');
-    if (overlay) overlay.classList.remove('open');
+    if (!overlay || !overlay.classList.contains('open')) return;
+    overlay.classList.remove('open');
+    overlay.classList.add('closing');
+    var dlg = overlay.querySelector('.modal-dialog');
+    function onEnd(e) {
+      if (e.animationName !== 'modalOut') return;   // 仅收拢动画结束才收尾
+      dlg.removeEventListener('animationend', onEnd);
+      overlay.classList.remove('closing');
+    }
+    dlg.addEventListener('animationend', onEnd);
   }
 
   /* 字段键 -> 面板内子元素选择器（不同模块的字段映射到各自 DOM 节点） */
@@ -139,6 +148,7 @@
     }
     var html = '<table class="rank-table"><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody></table>';
     overlay.querySelector('.modal-body').innerHTML = html;
+    overlay.classList.remove('closing');
     overlay.classList.add('open');
   }
 
@@ -194,6 +204,7 @@
     }
     html += '</tbody></table>';
     overlay.querySelector('.modal-body').innerHTML = html;
+    overlay.classList.remove('closing');
     overlay.classList.add('open');
   }
 
