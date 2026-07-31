@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>资管设计系统 · 提示词脚手架</title>
+<link rel="stylesheet" href="css/common.css">
+<style>
+  /* —— 本页作用域样式（不污染项目全局令牌）—— */
+  body { background:#020617; color:#e6f3ff; font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; }
+  .pl-wrap { max-width:1080px; margin:0 auto; padding:48px 24px 80px; }
+  .pl-hero { text-align:center; padding:40px 0 28px; border-bottom:1px solid rgba(0,191,255,0.25); }
+  .pl-hero h1 { font-size:30px; letter-spacing:4px; margin:0 0 10px; color:#fff; }
+  .pl-hero p { color:rgba(150,210,255,0.7); font-size:15px; margin:0; letter-spacing:1px; }
+
+  .pl-section { margin-top:46px; }
+  .pl-section > h2 {
+    font-size:20px; letter-spacing:2px; color:#fff; margin:0 0 6px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .pl-section > h2::before {
+    content:""; width:5px; height:22px; background:rgb(var(--cyan));
+    box-shadow:0 0 10px rgba(0,191,255,0.7);
+  }
+  .pl-section > .pl-sub { color:rgba(150,210,255,0.6); font-size:13px; margin:0 0 22px; letter-spacing:.5px; }
+
+  /* 令牌速查网格 */
+  .pl-tokens { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px; }
+  .pl-token {
+    background:rgba(0,30,60,0.55); border:1px solid rgba(0,191,255,0.4);
+    box-shadow:0 0 14px rgba(0,191,255,0.18); padding:14px 14px 12px; border-radius:0;
+    cursor:pointer; transition:transform .15s, box-shadow .15s;
+  }
+  .pl-token:hover { transform:translateY(-3px); box-shadow:0 0 22px rgba(0,191,255,0.5); }
+  .pl-token .swatch { height:46px; border-radius:0; margin-bottom:10px; }
+  .pl-token .t-name { font-size:13px; color:#eaf6ff; font-family:Consolas,monospace; }
+  .pl-token .t-val { font-size:12px; color:rgba(150,210,255,0.6); margin-top:3px; font-family:Consolas,monospace; }
+
+  /* 规范卡片 */
+  .pl-card {
+    background:rgba(0,30,60,0.4); border:1px solid rgba(0,191,255,0.3);
+    border-radius:0; padding:20px 22px; margin-bottom:18px;
+  }
+  .pl-card h3 { margin:0 0 10px; font-size:16px; color:rgb(var(--cyan)); letter-spacing:1px; }
+  .pl-card pre {
+    margin:0; padding:14px 16px; background:#020c1f; border:1px solid rgba(0,191,255,0.25);
+    border-radius:0; overflow:auto; font-size:13px; line-height:1.6; color:#cfe9ff;
+    font-family:Consolas,monospace; white-space:pre;
+  }
+
+  /* 提示词库 */
+  .pl-prompt {
+    background:rgba(0,30,60,0.4); border:1px solid rgba(0,191,255,0.3);
+    border-radius:0; padding:16px 18px; margin-bottom:14px;
+  }
+  .pl-prompt .pp-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .pl-prompt .pp-title { font-size:15px; color:#eaf6ff; letter-spacing:.5px; }
+  .pl-prompt .pp-tag {
+    font-size:11px; padding:2px 9px; border:1px solid rgba(0,191,255,0.5);
+    color:rgb(var(--cyan)); border-radius:0; letter-spacing:1px;
+  }
+  .pl-prompt code {
+    display:block; font-family:Consolas,monospace; font-size:13px; line-height:1.65;
+    color:#bfe3ff; background:#020c1f; border:1px solid rgba(0,191,255,判断 0.22);
+    border-radius:0; padding:12px 14px; white-space:pre-wrap; word-break:break-word;
+  }
+  .pl-copy {
+    margin-top:10px; display:inline-flex; align-items:center; gap:6px;
+    padding:7px 16px; border:1px solid rgba(0,191,255,0.6); border-radius:0;
+    background:rgba(0,191,255,0.08); color:rgb(var(--cyan)); font-size:13px;
+    letter-spacing:1px; cursor:pointer; transition:.15s;
+  }
+  .pl-copy:hover { background:rgba(0,191,255,0.18); box-shadow:0 0 14px rgba(0,191,255,0.4); }
+  .pl-copy.done { color:#7CFFB0; border-color:rgba(124,255,176,0.7); }
+
+  .pl-note { font-size:13px; color:rgba(150,210,255,0.7); line-height:1.7; margin:8px 0 0; }
+  .pl-foot { margin-top:50px; padding-top:22px; border-top:1px solid rgba(0,191,255,0.25); text-align:center; color:rgba(150,210,255,0.6); font-size:13px; letter-spacing:1px; }
+  .pl-foot a { color:rgb(var(--cyan)); text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="pl-wrap">
+
+  <header class="pl-hero">
+    <h1>资管设计系统 · 提示词脚手架</h1>
+    <p>统一配色令牌 · 直角组件规范 · 字段驱动弹窗 — 设计师照此可快速、准确还原页面</p>
+  </header>
+
+  <!-- ============ 1. 配色令牌速查 ============ -->
+  <section class="pl-section">
+    <h2>① 配色令牌速查</h2>
+    <p class="pl-sub">点击任意色块即可复制其 CSS 变量用法。所有颜色以 RGB 三元组存于 <code>:root</code>，配合 alpha 使用（如 <code>rgb(var(--cyan) / 0.6)</code> 等价于旧 <code>rgba(0,191,255,0.6)</code>）。</p>
+    <div class="pl-tokens" id="tokenGrid"></div>
+  </section>
+
+  <!-- ============ 2. 组件规范 ============ -->
+  <section class="pl-section">
+    <h2>② 核心组件规范（可直接粘贴）</h2>
+    <p class="pl-sub">以下片段均来自线上 common.css，复制即用，确保零漂移还原。</p>
+
+    <div class="pl-card">
+      <h3>直角按钮 / 输入框（全局规范）</h3>
+      <pre>.filter-btn, .cal-nav, .cal-cell, button, input {
+  border-radius:0;            /* 全站按钮/控件一律直角，禁用圆角 */
+}
+.filter-btn {
+  border:1px solid rgb(var(--cyan) / 0.6);
+  box-shadow:0 0 12px rgba(0,191,255,0.4), inset 0 0 8px rgba(0,191,255,0.15);
+  color:rgb(var(--cyan)); background:rgba(0,191,255,0.06);
+}</pre>
+    </div>
+
+    <div class="pl-card">
+      <h3>面板 / 弹窗发光描边</h3>
+      <pre>.panel, .modal-dialog {
+  border:1px solid rgb(var(--cyan) / 0.55);
+  box-shadow:0 0 26px rgba(0,150,255,0.4), inset 0 0 22px rgba(0,120,255,0.12);
+  background:linear-gradient(180deg, rgba(0,30,70,0.96), rgba(0,12,35,0.98));
+  border-radius:0;
+}</pre>
+    </div>
+
+    <div class="pl-card">
+      <h3>字段驱动弹窗（数据来自触发元素 data-cols）</h3>
+      <pre>/* 触发：data-modal="ranking" data-cols="rank:排名|name:公司|sub:同比|val:资产价值" */
+.modal-table th { font-size:16px; }      /* 表头最小 16px */
+.modal-table .f-val { font-size:19px; font-weight:700; color:rgb(var(--cyan)); }  /* 数字列加粗放大 */
+/* 进场：竖线 → 向两边展开；出场：向中间收拢 */
+.modal-overlay.open .modal-dialog { animation:modalIn .5s cubic-bezier(.22,.61,.36,1) forwards; }</pre>
+    </div>
+  </section>
+
+  <!-- ============ 3. 提示词库（点击复制） ============ -->
+  <section class="pl-section">
+    <h2>③ AI 提示词模板库</h2>
+    <p class="pl-sub">点击「复制」即可将提示词存入剪贴板，粘贴到文生图 / 代码生成工具中，即可产出与本系统一致的页面。</p>
+
+    <div class="pl-prompt">
+      <div class="pp-head"><span class="pp-title">整页 · 资管仪表盘</span><span class="pp-tag">PAGE LEVEL</span></div>
+      <code>生成一个资产管理仪表盘页面：深色科技风背景（#020617），顶部通用页头（系统时间 + 看板切换 + 筛选栏），主体为带青色发光描边（rgba(0,191,255,0.55)）的直角面板网格，所有按钮一律直角 border-radius:0，配色引用 --cyan / --blue / --text / --bg 设计令牌。包含 KPI 卡片、资产价值排行榜、SVG 图表与字段驱动弹窗，进场动效为竖线展开。</code>
+      <button class="pl-copy" data-copy>复制提示词</button>
+    </div>
+
+    <div class="pl-prompt">
+      <div class="pp-head"><span class="pp-title">组件 · 青色发光按钮</span><span class="pp-tag">COMPONENT</span></div>
+      <code>创建一个直角青色发光描边按钮：background transparent，border 1px solid rgba(0,191,255,0.6)，box-shadow 0 0 12px rgba(0,191,255,0.4)，border-radius:0，文字色 #00bfff；hover 时底色变蓝、文字转白、辉光增强。仅用 --cyan 令牌，不用硬编码色值。</code>
+      <button class="pl-copy" data-copy>复制提示词</button>
+    </div>
+
+    <div class="pl-prompt">
+      <div class="pp-head"><span class="pp-title">组件 · 数据面板</span><span class="pp-tag">COMPONENT</span></div>
+      <code>创建一个资管数据面板：background linear-gradient(180deg, rgba(0,30,70,0.96), rgba(0,12,35,0.98))，border 1px solid rgba(0,191,255,0.55)，box-shadow 内外发光，border-radius:0；内部含 KPI 数字（等宽 tabular-nums）、状态语义标签（在租/自用/经营中，直角）。</code>
+      <button class="pl-copy" data-copy>复制提示词</button>
+    </div>
+
+    <div class="pl-prompt">
+      <div class="pp-head"><span class="pp-title">组件 · 字段驱动弹窗</span><span class="pp-tag">COMPONENT</span></div>
+      <code>创建一个字段驱动弹窗：从触发元素的 data-cols 读取表头 schema，动态生成 thead/tbody；字号最小 16px，数字列 19px 加粗青色辉光；进场动效先出现一条中央竖线、停留 0.15s 再 scaleX 向两边展开，内容随后淡入；关闭时反向向中间收拢。</code>
+      <button class="pl-copy" data-copy>复制提示pc</button>
+    </div>
+
+    <div class="pl-prompt">
+      <div class="pp-head"><span class="pp-title">组件 · 表格行 hover 辉光</span><span class="pp-tag">COMPONENT</span></div>
+      <code>创建表格行 hover 辉光：tr:hover 时 background rgba(0,140,255,ᾰ0.1) 整行青光高亮 + 渐变底光，对应数值列 .val 加粗辉光；行底边线 1px solid rgba(0,120,200,0.12)。</code>
+      <button class="pl-copy" data-copy>复制提示词</button>
+    </div>
+
+    <div class="pl-prompt">
+      <div class="pp-head"><span class="pp-title">组件 · 科技风进度条</span><span class="pp-tag">COMPONENT</span></div>
+      <code>创建青→蓝渐变发光进度条：height 6px，track rgba(0,191,255,0.15)，fill linear-gradient(90deg,#00bfff,#0078ff) + box-shadow 0 0 12px rgba(0,191,255,0.6)；宽度由 data-w 属性驱动（JS 读取 getAttribute('data-w')），从 0 推进到目标值并实时显示百分比。</code>
+      <button class="pl-copy" data-copy>复制提示词</button>
+    </div>
+  </section>
+
+  <footer class="pl-foot">
+    配色单一来源 <code>:root</code> 设计令牌 · 全站 318 处颜色引用已统一 · 改一处全站同步 —
+    <a href="dashboard1.html">查看线上 Dashboard →</a>
+  </footer>
+
+</div>
+
+<script>
+  // —— 令牌数据：与 common.css :root 完全一致 ——
+  const TOKENS = [
+    { name:'--cyan',  r:0,   g:191, b:255, use:'主品牌青，全站主色 / 按钮 / 描边' },
+    { name:'--blue',  r:0,   g:120, b:255, use:'次级蓝，面板底 / 表头' },
+    { name:'--text',  r:180, g:225, b:255, use:'正文文字淡青灰' },
+    { name:'--bg',    r:0,   g:10,  b:35,  use:'最深色背景 #020a23' },
+    { name:'--amber', r:255, g:176, b:0,   use:'警示 / 高亮琥珀' },
+    { name:'--ok',    r:124, g:255, b:176, use:'成功状态绿（在租/经营中）' },
+    { name:'--white', r:255, g:255, b:255, use:'纯白标题 / 高对比文字' },
+    { name:'--black', r:0,   g:0,   b:0,   use:'纯黑叠层 / 阴影底' },
+  ];
+
+  // 渲染色块网格
+  const grid = document.getElementById('tokenGrid');
+  TOKENS.forEach(t => {
+    const hex = '#' + [t.r,t.g,t.b].map(x=>x.toString(16).padStart(2,'0')).join('');
+    const el = document.createElement('div');
+    el.className = 'pl-token';
+    el.innerHTML = `
+      <div class="swatch" style="background:rgb(${t.r} ${t.g} ${t.b})"></div>
+      <div class="t-name">${t.name}</div>
+      <div class="t-val">${hex}<br>rgb(${t.r} ${t.g} ${t.b})</div>`;
+    el.addEventListener('click', () => copyText(`rgb(var(${t.name}))`, el));
+    grid.appendChild(el);
+  });
+
+  // —— 复制逻辑 ——
+  function copyText(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      if (btn) flash(btn);
+    }).catch(() => {
+      // 回退方案
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      if (btn) flash(btn);
+    });
+  }
+  function flash(btn) {
+    btn.classList.add('done');
+    const label = btn.tagName === 'BUTTON' ? btn : btn.querySelector('.pl-copy');
+    if (label) { label.classList.add('done'); label.textContent = '已复制 ✓'; }
+  }
+
+  // 提示词卡片复制
+  document.querySelectorAll('.pl-copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.closest('.pl-prompt').querySelector('code').innerText;
+      copyText(code, btn);
+    });
+  });
+</script>
+</body>
+</html>
