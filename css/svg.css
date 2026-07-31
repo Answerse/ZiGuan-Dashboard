@@ -1,0 +1,43 @@
+/* ============================================================
+ * 脚手架页 / Dashboard 共用 · SVG 专属样式表
+ * 所有图形视觉（fill / stroke / stop-color / 动画）从此处统一管理，
+ * HTML 内不再出现任何内联 SVG 标记与写死色值——图形改由 <use href="sprite.svg#id"/> 外部引用。
+ * ============================================================ */
+
+/* —— 饼图 / 环形图（dashboard1 资产规划占比） —— */
+.pie-chart .seg {
+  fill: none;
+  stroke: rgb(var(--cyan));
+  stroke-width: 16;
+  stroke-linecap: butt;
+}
+.pie-chart .seg[data-i="0"] { stroke: #00bfff; stroke-dasharray: var(--d0, 138.2 207.4); stroke-dashoffset: var(--e0, 0); }
+.pie-chart .seg[data-i="1"] { stroke: #4d9fff; stroke-dasharray: var(--d1, 103.7 241.9); stroke-dashoffset: var(--e1, 0); }
+.pie-chart .seg[data-i="2"] { stroke: #1e7fff; stroke-dasharray: var(--d2, 69.1 276.5); stroke-dashoffset: var(--e2, 0); }
+.pie-chart .seg[data-i="3"] { stroke: #0066ff; stroke-dasharray: var(--d3, 34.6 311.0); stroke-dashoffset: var(--e3, 0); }
+.pie-icon { fill: none; stroke: #00e6ff; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* —— 账单收缴环形（dashboard1 / dashboard2 共用） —— */
+.bill-ring .bill-track { fill: none; stroke: rgba(0,120,220,0.28); stroke-width: 12; stroke-linecap: round; }
+.bill-ring .gauge-fill { fill: none; stroke: url(#gaugeGrad); stroke-width: 12; stroke-linecap: round; }
+.bill-ring.draw .bill-track,
+.bill-ring.draw .gauge-fill { animation: gaugeDraw 1.4s ease forwards; }
+@keyframes gaugeDraw { from { stroke-dashoffset: 377; } to { stroke-dashoffset: 0; } }
+
+/* —— 地图（广西地市分布，外部引用 map.svg#gx） —— */
+.map-wrap svg { display: block; width: 100%; height: 100%; }
+.map-bg-mark { fill: url(#mapBg); }
+.map-city { fill: rgba(80,140,180,0.4); }
+
+/* —— 进度条（由 data-w 驱动，JS 读取 getAttribute） —— */
+.prog-fill { transition: width .9s cubic-bezier(.22,.61,.36,1); }
+
+/* —— 通用：SVG 内文字与描边令牌化 —— */
+svg text {
+  fill: rgba(80,140,180,0.4);
+  font-family: "PingFang SC","Microsoft YaHei",sans-serif;
+  font-size: 4.2px;
+}
+svg .hl { fill: #00bfff; font-weight: 700; }
+.svg-stroke { stroke: rgba(0,180,255,0.4); stroke-width: 0.6; stroke-dasharray: 3 2; }
+.svg-fill-dim { fill: rgba(0,40,80,0.3); stroke: rgba(0,100,180,0.35); stroke-width: 0.8; }

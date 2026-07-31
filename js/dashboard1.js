@@ -235,7 +235,7 @@
     const tabs = Array.from(document.querySelectorAll('#ratioTabs .tab'));
     const pie = document.getElementById('ratioPie');
     const legend = document.getElementById('ratioLegend');
-    const segs = Array.from(pie ? pie.querySelectorAll('.seg') : []);
+    // 四段在 <use> 阴影树中，由 svg.css 经宿主 CSS 变量驱动（不再 querySelector 阴影节点）
     const pcts = Array.from(legend ? legend.querySelectorAll('.pct') : []);
     const icon = pie ? pie.querySelector('.pie-icon') : null;
     if (!tabs.length || !pie) return;
@@ -250,12 +250,16 @@
     function render(key) {
       const arr = DATA[key];
       let acc = 0;
-      segs.forEach(function (s, i) {
-        const len = arr[i] / 100 * C;
-        s.setAttribute('stroke-dasharray', len.toFixed(1) + ' ' + (C - len).toFixed(1));
-        s.setAttribute('stroke-dashoffset', (-acc).toFixed(1));
-        acc += len;
-      });
+      function applySeg(arr) {
+        let acc = 0;
+        arr.forEach(function (v, i) {
+          const len = v / 100 * C;
+          pie.style.setProperty('--d' + i, len.toFixed(1) + ' ' + (C - len).toFixed(1));
+          pie.style.setProperty('--e' + i, (-acc).toFixed(1));
+          acc += len;
+        });
+      }
+      applySeg(arr);
       // 图例数字加载动效：从 0 滚动到目标值 + 闪烁
       pcts.forEach(function (p, i) {
         const target = arr[i];
@@ -298,7 +302,10 @@
       timer = setInterval(function () { activate(current === 'area' ? 'count' : 'area'); }, INTERVAL);
     }
     // 进场：环形图四段先归零，待面板入场就位后再绘制（含图例数字加载动效）
-    segs.forEach(function (s) { s.setAttribute('stroke-dasharray', '0 345.575'); s.setAttribute('stroke-dashoffset', '0'); });
+    ['0','1','2','3'].forEach(function (i) {
+      pie.style.setProperty('--d' + i, '0 345.575');
+      pie.style.setProperty('--e' + i, '0');
+    });
     setTimeout(function () { render('area'); restart(); }, 900);
   })();
 
@@ -371,9 +378,9 @@
     document.querySelectorAll('.prog-fill').forEach(function (f) {
       f.dataset.w = f.getAttribute('data-w') || f.style.width; f.style.width = '0%';
     });
-    var bc = document.querySelector('.bill-ring .bill-track');
+    var ring = document.querySelector('.bill-ring');
     var C = 2 * Math.PI * 60;
-    if (bc) { bc.style.strokeDasharray = C; bc.style.strokeDashoffset = C; }
+    // 阴影树 .bill-track 由 CSS (.bill-ring.draw .bill-track) 动画驱动，无需直接设置
     document.querySelectorAll('.line-chart .lc-line').forEach(function (p) {
       var L = p.getTotalLength();
       p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
@@ -386,11 +393,8 @@
       document.querySelectorAll('.prog-fill').forEach(function (f) {
         requestAnimationFrame(function () { f.style.width = f.dataset.w; });
       });
-      // 账单环形图：整圈描边绘制
-      if (bc) {
-        bc.style.transition = 'stroke-dashoffset 1.4s ease';
-        requestAnimationFrame(function () { bc.style.strokeDashoffset = 0; });
-      }
+      // 账单环形图：整圈描边绘制（阴影树，CSS 驱动）
+      if (ring) { ring.classList.add('draw'); }
       // 折线图：线绘制 + 区域淡入
       document.querySelectorAll('.line-chart .lc-line').forEach(function (p) {
         p.style.transition = 'stroke-dashoffset 1.6s ease';

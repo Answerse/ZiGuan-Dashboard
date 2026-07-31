@@ -346,8 +346,8 @@
     document.querySelectorAll('.prog-fill').forEach(function (f) {
       f.dataset.w = f.getAttribute('data-w') || f.style.width; f.style.width = '0%';
     });
-    var bc = document.querySelector('.bill-ring .bill-track');
-    if (bc) { var bcL = bc.getTotalLength(); bc.style.strokeDasharray = bcL; bc.style.strokeDashoffset = bcL; }
+    var ring = document.querySelector('.bill-ring');
+    // 阴影树 .bill-track 由 CSS (.bill-ring.draw .bill-track) 动画驱动，无需直接设置
     document.querySelectorAll('.line-chart .lc-line').forEach(function (p) {
       var L = p.getTotalLength();
       p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
@@ -360,11 +360,8 @@
       document.querySelectorAll('.prog-fill').forEach(function (f) {
         requestAnimationFrame(function () { f.style.width = f.dataset.w; });
       });
-      // 账单环形图：整圈描边绘制
-      if (bc) {
-        bc.style.transition = 'stroke-dashoffset 1.4s ease';
-        requestAnimationFrame(function () { bc.style.strokeDashoffset = 0; });
-      }
+      // 账单环形图：整圈描边绘制（阴影树，CSS 驱动）
+      if (ring) { ring.classList.add('draw'); }
       // 折线图：线绘制 + 区域淡入
       document.querySelectorAll('.line-chart .lc-line').forEach(function (p) {
         p.style.transition = 'stroke-dashoffset 1.6s ease';
