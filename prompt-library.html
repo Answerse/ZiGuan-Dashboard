@@ -5,83 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>资管设计系统 · 提示词脚手架</title>
 <link rel="stylesheet" href="css/common.css">
-<style>
-  /* —— 本页作用域样式（不污染项目全局令牌）—— */
-  body { background:#020617; color:#e6f3ff; font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; }
-  /* 脚手架页需可滚动（覆盖 dashboard 全屏禁滚，仅作用于本页） */
-  html, body { overflow:auto; height:auto; scrollbar-width:auto; -ms-overflow-style:auto; }
-  html::-webkit-scrollbar, body::-webkit-scrollbar { width:10px; height:10px; display:block; }
-  html::-webkit-scrollbar-thumb { background:rgba(0,191,255,0.4); border-radius:0; }
-  html::-webkit-scrollbar-track { background:rgba(0,30,60,0.6); }
-  .pl-wrap { max-width:1080px; margin:0 auto; padding:48px 24px 80px; }
-  .pl-hero { text-align:center; padding:40px 0 28px; border-bottom:1px solid rgba(0,191,255,0.25); }
-  .pl-hero h1 { font-size:30px; letter-spacing:4px; margin:0 0 10px; color:#fff; }
-  .pl-hero p { color:rgba(150,210,255,0.7); font-size:15px; margin:0; letter-spacing:1px; }
+<link rel="stylesheet" href="css/prompt-library.css">
 
-  .pl-section { margin-top:46px; }
-  .pl-section > h2 {
-    font-size:20px; letter-spacing:2px; color:#fff; margin:0 0 6px;
-    display:flex; align-items:center; gap:10px;
-  }
-  .pl-section > h2::before {
-    content:""; width:5px; height:22px; background:rgb(var(--cyan));
-    box-shadow:0 0 10px rgba(0,191,255,0.7);
-  }
-  .pl-section > .pl-sub { color:rgba(150,210,255,0.6); font-size:13px; margin:0 0 22px; letter-spacing:.5px; }
-
-  /* 令牌速查网格 */
-  .pl-tokens { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px; }
-  .pl-token {
-    background:rgba(0,30,60,0.55); border:1px solid rgba(0,191,255,0.4);
-    box-shadow:0 0 14px rgba(0,191,255,0.18); padding:14px 14px 12px; border-radius:0;
-    cursor:pointer; transition:transform .15s, box-shadow .15s;
-  }
-  .pl-token:hover { transform:translateY(-3px); box-shadow:0 0 22px rgba(0,191,255,0.5); }
-  .pl-token .swatch { height:46px; border-radius:0; margin-bottom:10px; }
-  .pl-token .t-name { font-size:13px; color:#eaf6ff; font-family:Consolas,monospace; }
-  .pl-token .t-val { font-size:12px; color:rgba(150,210,255,0.6); margin-top:3px; font-family:Consolas,monospace; }
-
-  /* 规范卡片 */
-  .pl-card {
-    background:rgba(0,30,60,0.4); border:1px solid rgba(0,191,255,0.3);
-    border-radius:0; padding:20px 22px; margin-bottom:18px;
-  }
-  .pl-card h3 { margin:0 0 10px; font-size:16px; color:rgb(var(--cyan)); letter-spacing:1px; }
-  .pl-card pre {
-    margin:0; padding:14px 16px; background:#020c1f; border:1px solid rgba(0,191,255,0.25);
-    border-radius:0; overflow:auto; font-size:13px; line-height:1.6; color:#cfe9ff;
-    font-family:Consolas,monospace; white-space:pre;
-  }
-
-  /* 提示词库 */
-  .pl-prompt {
-    background:rgba(0,30,60,0.4); border:1px solid rgba(0,191,255,0.3);
-    border-radius:0; padding:16px 18px; margin-bottom:14px;
-  }
-  .pl-prompt .pp-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
-  .pl-prompt .pp-title { font-size:15px; color:#eaf6ff; letter-spacing:.5px; }
-  .pl-prompt .pp-tag {
-    font-size:11px; padding:2px 9px; border:1px solid rgba(0,191,255,0.5);
-    color:rgb(var(--cyan)); border-radius:0; letter-spacing:1px;
-  }
-  .pl-prompt code {
-    display:block; font-family:Consolas,monospace; font-size:13px; line-height:1.65;
-    color:#bfe3ff; background:#020c1f; border:1px solid rgba(0,191,255,判断 0.22);
-    border-radius:0; padding:12px 14px; white-space:pre-wrap; word-break:break-word;
-  }
-  .pl-copy {
-    margin-top:10px; display:inline-flex; align-items:center; gap:6px;
-    padding:7px 16px; border:1px solid rgba(0,191,255,0.6); border-radius:0;
-    background:rgba(0,191,255,0.08); color:rgb(var(--cyan)); font-size:13px;
-    letter-spacing:1px; cursor:pointer; transition:.15s;
-  }
-  .pl-copy:hover { background:rgba(0,191,255,0.18); box-shadow:0 0 14px rgba(0,191,255,0.4); }
-  .pl-copy.done { color:#7CFFB0; border-color:rgba(124,255,176,0.7); }
-
-  .pl-note { font-size:13px; color:rgba(150,210,255,0.7); line-height:1.7; margin:8px 0 0; }
-  .pl-foot { margin-top:50px; padding-top:22px; border-top:1px solid rgba(0,191,255,0.25); text-align:center; color:rgba(150,210,255,0.6); font-size:13px; letter-spacing:1px; }
-  .pl-foot a { color:rgb(var(--cyan)); text-decoration:none; }
-</style>
 </head>
 <body>
 <div class="pl-wrap">
